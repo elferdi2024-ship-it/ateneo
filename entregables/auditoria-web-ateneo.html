@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Dossier web - Ateneo de Montevideo</title>
+  <style>
+    @page { size: A4; margin: 0; }
+
+    :root {
+      --black: #08090a;
+      --ink: #1c1a16;
+      --muted: #574f43;
+      --paper: #f3ebdc;
+      --paper-light: #fffaf0;
+      --stone: #b9aa8d;
+      --gold: #a9792e;
+      --blue: #2f7890;
+      --red: #8d3329;
+      --line: rgba(28, 26, 22, .18);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.42;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+      background: var(--paper);
+      padding: 18mm;
+    }
+
+    .page:last-child { page-break-after: auto; }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: .94;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    h1 {
+      font-size: 43px;
+      letter-spacing: -1.6px;
+      max-width: 122mm;
+    }
+
+    h2 {
+      font-size: 27px;
+      letter-spacing: -1px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 15px;
+      letter-spacing: -.35px;
+      margin-bottom: 6px;
+    }
+
+    p, li, td {
+      color: var(--muted);
+      font-size: 11.5px;
+      margin: 0 0 8px;
+    }
+
+    strong { color: var(--ink); }
+
+    .cover {
+      padding: 0;
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: 52mm 1fr;
+    }
+
+    .cover-rail {
+      background: var(--black);
+      color: white;
+      padding: 15mm 9mm;
+      display: grid;
+      align-content: space-between;
+      border-right: 3px solid var(--gold);
+    }
+
+    .cover-rail img {
+      width: 100%;
+      background: #151719;
+      border: 1px solid rgba(255,255,255,.22);
+      padding: 8px;
+    }
+
+    .rail-text {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font: 800 10px Arial, sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.74);
+    }
+
+    .cover-main {
+      min-height: 297mm;
+      padding: 17mm;
+      display: grid;
+      grid-template-rows: 82mm 1fr auto;
+      gap: 13mm;
+      background:
+        linear-gradient(180deg, rgba(243,235,220,.92), rgba(243,235,220,.98)),
+        url("../public/HISTORIA/imgi_8_Antigua-1.jpg") center top / cover;
+    }
+
+    .cover-photo {
+      border: 1px solid rgba(28,26,22,.25);
+      height: 82mm;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cover-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(.15) contrast(1.05);
+    }
+
+    .cover-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 45%, rgba(8,9,10,.22));
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font: 900 10px Arial, sans-serif;
+      letter-spacing: 1.6px;
+      margin: 0 0 8px;
+      text-transform: uppercase;
+    }
+
+    .cover-copy {
+      color: #383126;
+      font-size: 15px;
+      line-height: 1.5;
+      max-width: 126mm;
+      margin-top: 12px;
+    }
+
+    .cover-meta {
+      border-top: 2px solid var(--ink);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 14px;
+      padding-top: 10px;
+      font: 800 10px Arial, sans-serif;
+      color: var(--ink);
+      text-transform: uppercase;
+    }
+
+    .chapter-label {
+      align-items: center;
+      color: var(--red);
+      display: flex;
+      gap: 9px;
+      font: 900 10px Arial, sans-serif;
+      letter-spacing: 1.3px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .chapter-label::before {
+      content: attr(data-number);
+      align-items: center;
+      background: var(--red);
+      color: white;
+      border-radius: 50%;
+      display: inline-flex;
+      height: 25px;
+      justify-content: center;
+      width: 25px;
+    }
+
+    .intro {
+      align-items: start;
+      display: grid;
+      grid-template-columns: 58mm 1fr;
+      gap: 15mm;
+      margin-bottom: 13mm;
+    }
+
+    .intro img {
+      border: 1px solid var(--line);
+      height: 72mm;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    .lead {
+      color: #302a22;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .rule {
+      border-top: 2px solid var(--ink);
+      margin: 8mm 0 7mm;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .card {
+      background: var(--paper-light);
+      border: 1px solid var(--line);
+      min-height: 34mm;
+      padding: 11px 12px 12px;
+      position: relative;
+    }
+
+    .card::before {
+      background: var(--gold);
+      bottom: 0;
+      content: "";
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 4px;
+    }
+
+    .card p { margin: 0; }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 10mm;
+    }
+
+    .stat {
+      background: var(--black);
+      min-height: 27mm;
+      padding: 9px;
+    }
+
+    .stat strong {
+      color: var(--stone);
+      display: block;
+      font: 900 20px Arial, sans-serif;
+      margin-bottom: 3px;
+    }
+
+    .stat span {
+      color: rgba(255,255,255,.82);
+      font: 800 9px Arial, sans-serif;
+      text-transform: uppercase;
+    }
+
+    .feature {
+      background: var(--black);
+      color: white;
+      margin-bottom: 9mm;
+      overflow: hidden;
+      padding: 11mm;
+      position: relative;
+    }
+
+    .feature::before {
+      background: url("../public/IMAGEN PRINCIPAL.png") center / cover;
+      content: "";
+      inset: 0;
+      opacity: .18;
+      position: absolute;
+    }
+
+    .feature > * { position: relative; }
+    .feature h2 { color: white; font-size: 30px; }
+    .feature p { color: rgba(255,255,255,.82); }
+
+    .spread {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12mm;
+    }
+
+    table {
+      background: var(--paper-light);
+      border-collapse: collapse;
+      margin-top: 6mm;
+      width: 100%;
+    }
+
+    th {
+      background: var(--black);
+      color: white;
+      font: 900 9.5px Arial, sans-serif;
+      letter-spacing: .8px;
+      padding: 8px;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      vertical-align: top;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 16px;
+    }
+
+    li { margin-bottom: 7px; }
+
+    .quote {
+      background: rgba(255,250,240,.72);
+      border-left: 5px solid var(--red);
+      margin-top: 9mm;
+      padding: 10px 12px;
+    }
+
+    .quote p {
+      color: #302a22;
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 7px;
+      margin-top: 8mm;
+    }
+
+    .step {
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 9px;
+      grid-template-columns: 28mm 1fr;
+      padding-top: 8px;
+    }
+
+    .step b {
+      color: var(--red);
+      font: 900 11px Arial, sans-serif;
+      text-transform: uppercase;
+    }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      bottom: 12mm;
+      color: var(--stone-dark, #756b5c);
+      display: flex;
+      font: 800 9px Arial, sans-serif;
+      justify-content: space-between;
+      left: 18mm;
+      letter-spacing: .8px;
+      padding-top: 6px;
+      position: absolute;
+      right: 18mm;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <section class="page cover">
+    <aside class="cover-rail">
+      <img src="../public/ateneo logo con fecha 150 años.jpg" alt="Ateneo de Montevideo" />
+      <div class="rail-text">Dossier web institucional</div>
+    </aside>
+    <main class="cover-main">
+      <div class="cover-photo">
+        <img src="../public/HISTORIA/imgi_8_Antigua-1.jpg" alt="Postal historica del Ateneo de Montevideo" />
+      </div>
+      <div>
+        <p class="eyebrow">Ateneo de Montevideo</p>
+        <h1>Auditoria, rediseño y posicionamiento digital</h1>
+        <p class="cover-copy">Informe de presentacion para compartir con directivos y referentes institucionales. Resume el trabajo implementado en la nueva web, su valor comunicacional y los proximos pasos recomendados.</p>
+      </div>
+      <div class="cover-meta">
+        <span>Proyecto: sitio institucional y landing principal</span>
+        <span>Ubicacion: Plaza Cagancha 1157</span>
+        <span>Fecha: mayo 2026</span>
+        <span>Entrega: web, SEO tecnico y dossier</span>
+      </div>
+    </main>
+  </section>
+
+  <section class="page">
+    <div class="chapter-label" data-number="01">Resumen ejecutivo</div>
+    <div class="intro">
+      <img src="../public/ateneo plaza.jpg" alt="Ateneo de Montevideo en Plaza Cagancha" />
+      <div>
+        <h2>Una web pensada como puerta institucional</h2>
+        <p class="lead">La nueva version del sitio busca presentar al Ateneo con una presencia mas clara, patrimonial y actual. La estructura se organizo para que cualquier visitante pueda entender rapidamente que es el Ateneo, donde esta, que cursos ofrece, cual es su historia y como contactarse.</p>
+        <p>El trabajo combina una estetica editorial vinculada al archivo cultural con herramientas practicas: navegacion por secciones, paginas especificas, consulta por WhatsApp, estructura SEO y contenido institucional preparado para crecer.</p>
+      </div>
+    </div>
+
+    <div class="rule"></div>
+    <h2>Lo que se resolvio</h2>
+    <div class="cards">
+      <article class="card"><h3>Identidad visual</h3><p>Uso de logos oficiales, imagen principal del edificio, imagen aniversario y material historico para alejar la web de una plantilla generica.</p></article>
+      <article class="card"><h3>Arquitectura</h3><p>Menu superior con secciones principales y submenu "Sobre el Ateneo": Estatutos, Directivos y Presidentes.</p></article>
+      <article class="card"><h3>Contenido institucional</h3><p>Historia, estatutos, salas, visitas y contacto quedan organizados como paginas navegables y no como bloques sueltos.</p></article>
+      <article class="card"><h3>Conversion</h3><p>Cursos con paginas propias, consulta por WhatsApp y formulario visual listo para activar cuando se defina el flujo operativo.</p></article>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat"><strong>9</strong><span>secciones principales</span></div>
+      <div class="stat"><strong>SEO</strong><span>metadata por ruta</span></div>
+      <div class="stat"><strong>31</strong><span>enlaces revisados</span></div>
+      <div class="stat"><strong>200</strong><span>rutas sin error</span></div>
+    </div>
+    <div class="footer"><span>Ateneo de Montevideo</span><span>01</span></div>
+  </section>
+
+  <section class="page">
+    <div class="chapter-label" data-number="02">Implementacion</div>
+    <div class="feature">
+      <p class="eyebrow">Diseño, contenido y navegacion</p>
+      <h2>El sitio deja de ser una landing aislada y pasa a funcionar como sistema institucional.</h2>
+      <p>La home concentra el relato principal, pero cada tema relevante tiene su propio recorrido: cursos, salas, historia, estatutos, visita y contacto.</p>
+    </div>
+
+    <table>
+      <thead><tr><th>Area</th><th>Trabajo aplicado</th><th>Impacto esperado</th></tr></thead>
+      <tbody>
+        <tr><td>Home</td><td>Hero con fachada, cursos, salas, historia, visita y video final.</td><td>Entrada clara, fuerte y reconocible para publico general.</td></tr>
+        <tr><td>Historia</td><td>Texto institucional desde archivo y galeria de imagenes historicas.</td><td>Refuerza patrimonio, trayectoria y autoridad cultural.</td></tr>
+        <tr><td>Estatutos</td><td>Documento reorganizado por capitulos, secciones y articulos destacados.</td><td>Lectura formal, ordenada y facil de consultar.</td></tr>
+        <tr><td>Cursos</td><td>Listado filtrable, detalle individual y consulta por WhatsApp.</td><td>Mayor facilidad para convertir interes en contacto.</td></tr>
+        <tr><td>Salas</td><td>Tarjetas visuales y paginas de detalle con figuras historicas.</td><td>Mayor presencia del legado institucional y de sus espacios.</td></tr>
+        <tr><td>Footer</td><td>Logo aniversario, enlaces y ubicacion.</td><td>Cierre consistente, institucional y orientado a accion.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="quote"><p><strong>Criterio de diseño:</strong> preservar la solemnidad cultural del Ateneo, pero con una interfaz actual, clara y navegable. La web no busca parecer promocional; busca parecer institucional, viva y util.</p></div>
+    <div class="footer"><span>Ateneo de Montevideo</span><span>02</span></div>
+  </section>
+
+  <section class="page">
+    <div class="chapter-label" data-number="03">SEO y presencia en Google</div>
+    <div class="spread">
+      <div>
+        <h2>Preparacion para buscadores</h2>
+        <p>Se incorporaron mejoras tecnicas para que Google rastree y comprenda mejor la web. Esto no garantiza automaticamente enlaces enriquecidos bajo el resultado principal, pero mejora las condiciones para que Google los genere con el tiempo.</p>
+        <ul>
+          <li><strong>Titulos y descripciones dinamicas</strong> para home, cursos, historia, estatutos, contacto y paginas internas.</li>
+          <li><strong>Canonicals por ruta</strong> para ordenar la indexacion.</li>
+          <li><strong>Open Graph y Twitter Card</strong> para compartir mejor en redes y mensajeria.</li>
+          <li><strong>JSON-LD</strong> para Organization, LocalBusiness y catalogo de cursos.</li>
+          <li><strong>robots.txt y sitemap.xml</strong> listos para Search Console.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Resultado buscado</h2>
+        <p>La meta es que el Ateneo aparezca en Google con una presentacion mas completa: pagina principal, cursos, historia, estatutos, contacto y otras secciones importantes.</p>
+        <div class="cards" style="grid-template-columns:1fr;">
+          <article class="card"><h3>Para lograrlo</h3><p>Publicar el sitio, verificar el dominio en Google Search Console y enviar el sitemap.</p></article>
+          <article class="card"><h3>Para fortalecerlo</h3><p>Completar Directivos y Presidentes con informacion oficial, mantener cursos actualizados y sumar contenido periodico.</p></article>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule"></div>
+    <h2>Validacion realizada</h2>
+    <div class="timeline">
+      <div class="step"><b>Build</b><p>Compilacion correcta, sin errores de TypeScript o Vite.</p></div>
+      <div class="step"><b>Links</b><p>Rutas principales y enlaces internos revisados con respuesta 200.</p></div>
+      <div class="step"><b>SEO</b><p>Metadata, canonicals, JSON-LD, robots y sitemap verificados.</p></div>
+      <div class="step"><b>UX</b><p>Se corrigio contraste, encuadre del hero, menu, botones y legibilidad general.</p></div>
+    </div>
+    <div class="footer"><span>Ateneo de Montevideo</span><span>03</span></div>
+  </section>
+
+  <section class="page">
+    <div class="chapter-label" data-number="04">Proximos pasos</div>
+    <div class="intro">
+      <img src="../public/IMAGEN PRINCIPAL.png" alt="Fachada del Ateneo" />
+      <div>
+        <h2>Una base lista para crecer</h2>
+        <p class="lead">El sitio queda preparado para presentarse, publicarse y empezar a medir resultados. La siguiente etapa deberia concentrarse en completar contenido institucional pendiente y activar herramientas de seguimiento.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <article class="card"><h3>1. Publicacion</h3><p>Subir la version final al dominio oficial y revisar que todas las rutas funcionen con HTTPS.</p></article>
+      <article class="card"><h3>2. Search Console</h3><p>Verificar ateneodemontevideo.uy y enviar el sitemap para acelerar el rastreo.</p></article>
+      <article class="card"><h3>3. Contenido oficial</h3><p>Completar Directivos y Presidentes para reforzar confianza institucional y busquedas de marca.</p></article>
+      <article class="card"><h3>4. Inscripciones</h3><p>Activar el formulario de cursos cuando se defina si enviara a email, planilla, CRM o sistema propio.</p></article>
+    </div>
+
+    <div class="quote"><p><strong>Conclusion:</strong> la web queda como una plataforma institucional moderna, con base SEO inicial, contenido patrimonial, navegacion clara y capacidad de evolucionar hacia inscripciones, agenda cultural y medicion de resultados.</p></div>
+    <div class="footer"><span>Ateneo de Montevideo</span><span>04</span></div>
+  </section>
+</body>
+</html>
