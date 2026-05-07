@@ -311,12 +311,12 @@ const rooms: Room[] = [
 ];
 
 const historyImages = [
-  '/HISTORIA/imgi_3_6340307504_ae4bbae73d_o.jpg',
-  '/HISTORIA/imgi_8_Antigua-1.jpg',
-  '/HISTORIA/imgi_6_Ateneo-Montevideo-1.jpg',
-  '/HISTORIA/imgi_9_20222846424_58494a331d_o.jpg',
-  '/HISTORIA/imgi_10_7453965434_90c6750d88_o.jpg',
-  '/HISTORIA/imgi_13_Ateneo-Asamblea-General-Ordinaria-2024-768x617.jpg',
+  '/optimized/imgi_3_6340307504_ae4bbae73d_o-1200.webp',
+  '/optimized/imgi_8_Antigua-1-1200.webp',
+  '/optimized/imgi_6_Ateneo-Montevideo-1-1200.webp',
+  '/optimized/imgi_9_20222846424_58494a331d_o-1200.webp',
+  '/optimized/imgi_10_7453965434_90c6750d88_o-1200.webp',
+  '/optimized/imgi_13_Ateneo-Asamblea-General-Ordinaria-2024-768x617-1200.webp',
 ];
 
 const navItems = [
@@ -568,7 +568,10 @@ function SectionTitle({ eyebrow, title, action }: { eyebrow?: string; title: str
 function Hero() {
   return (
     <section className="hero">
-      <img src="/IMAGEN PRINCIPAL.png" alt="Fachada del Ateneo de Montevideo en Plaza Cagancha" width="2730" height="1568" />
+      <picture>
+        <source type="image/webp" srcSet="/optimized/hero-1280.webp 1280w, /optimized/hero-1920.webp 1920w" sizes="100vw" />
+        <img src="/IMAGEN PRINCIPAL.png" alt="Fachada del Ateneo de Montevideo en Plaza Cagancha" width="2730" height="1568" />
+      </picture>
       <div className="hero-caption">
         <p>Programación 2026</p>
         <h1>Ateneo de Montevideo</h1>
@@ -1069,7 +1072,7 @@ function ContactPage() {
 function VisitPreview() {
   return (
     <section className="visit-preview">
-      <img src="/ateneo plaza.jpg" alt="Ateneo de Montevideo sobre Plaza Cagancha" width="408" height="306" loading="lazy" />
+      <img src="/optimized/ateneo-plaza-900.webp" alt="Ateneo de Montevideo sobre Plaza Cagancha" width="387" height="290" loading="lazy" />
       <div>
         <SectionTitle eyebrow="Ven a visitarnos" title="Plaza Cagancha 1157" action={<MuseumButton to="/contacto">Ver contacto</MuseumButton>} />
         <p>Lunes a viernes de 14:00 a 20:00. Sábados de 9:00 a 13:00. Consultá por cursos, salas, actividades y programación cultural.</p>
