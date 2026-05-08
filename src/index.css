@@ -1578,6 +1578,7 @@ img {
   .exhibitions-layout,
   .exhibition-card,
   .research-card,
+  .editorial-card,
   .article-hero,
   .article-layout,
   .room-strip,
@@ -1618,6 +1619,26 @@ img {
   .exhibition-card > a,
   .research-card > a {
     gap: 14px;
+  }
+
+  .editorial-card {
+    min-height: auto;
+  }
+
+  .editorial-card,
+  .exhibition-card > a,
+  .research-card > a {
+    grid-template-columns: 1fr;
+  }
+
+  .editorial-card img,
+  .exhibition-card img,
+  .research-card img {
+    aspect-ratio: 16 / 10;
+  }
+
+  .editorial-card div {
+    padding: 16px;
   }
 
   .event-agenda,
@@ -1697,6 +1718,20 @@ img {
   .research-card h2 {
     font-size: clamp(26px, 8vw, 34px);
     line-height: 0.96;
+  }
+
+  .hero-caption,
+  .page-hero {
+    overflow: hidden;
+  }
+
+  .hero-caption h1,
+  .page-hero h1,
+  .editorial-card h3,
+  .exhibition-card h2,
+  .research-card h2 {
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .museum-button,
