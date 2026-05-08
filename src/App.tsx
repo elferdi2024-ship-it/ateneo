@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { BrowserRouter, Link, NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import Clock from 'lucide-react/dist/esm/icons/clock';
@@ -321,11 +322,109 @@ const historyImages = [
 
 const navItems = [
   { label: 'Visita', to: '/visita' },
+  { label: 'Exposiciones', to: '/exposiciones' },
+  { label: 'Investigación', to: '/investigacion-educacion' },
   { label: 'Cursos', to: '/cursos' },
   { label: 'Salas', to: '/salas' },
   { label: 'Historia', to: '/historia' },
   { label: 'Contacto', to: '/contacto' },
 ];
+
+const exhibitions = [
+  {
+    id: 'memoria-visual-rio-plata',
+    title: 'Memoria visual del Río de la Plata',
+    period: 'Mayo — Agosto 2026',
+    format: 'Exposición principal',
+    summary: 'Recorrido fotográfico y documental sobre la vida cultural montevideana entre 1900 y 1980.',
+    image: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=1400&q=80',
+  },
+  {
+    id: 'archivo-sonoro-ateneo',
+    title: 'Archivo Sonoro del Ateneo',
+    period: 'Junio — Septiembre 2026',
+    format: 'Instalación inmersiva',
+    summary: 'Piezas de audio, discursos y lecturas históricas reeditadas para una experiencia contemporánea.',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1400&q=80',
+  },
+  {
+    id: 'escena-uruguaya-viva',
+    title: 'Escena uruguaya viva',
+    period: 'Julio — Octubre 2026',
+    format: 'Muestra colectiva',
+    summary: 'Cruce de fotografía, dibujo y nuevos medios de artistas emergentes y referentes nacionales.',
+    image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1400&q=80',
+  },
+];
+
+const events = [
+  { title: 'Ciclo de conversaciones públicas', date: 'Jueves 19:00', detail: 'Pensamiento, ciudad y cultura contemporánea.' },
+  { title: 'Noches de archivo y cine', date: 'Viernes 20:30', detail: 'Proyecciones comentadas con investigadores invitados.' },
+  { title: 'Visitas guiadas curatoriales', date: 'Sábados 11:00', detail: 'Recorridos por exposiciones con enfoque pedagógico.' },
+];
+
+const researchArticles = [
+  {
+    title: 'Pedagogías culturales para públicos diversos',
+    category: 'Educación',
+    excerpt: 'Diseño de experiencias de aprendizaje en salas, archivos y programas públicos del Ateneo.',
+    image: 'https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=1400&q=80',
+  },
+  {
+    title: 'Atlas de instituciones culturales de Montevideo',
+    category: 'Investigación',
+    excerpt: 'Mapeo editorial de redes culturales, patrimonio y mediación comunitaria en la ciudad.',
+    image: 'https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=1400&q=80',
+  },
+  {
+    title: 'Laboratorio de lectura crítica y ciudadanía',
+    category: 'Programas',
+    excerpt: 'Serie de artículos y materiales abiertos para docentes, estudiantes y equipos culturales.',
+    image: 'https://images.unsplash.com/photo-1513001900722-370f803f498d?w=1400&q=80',
+  },
+];
+
+const researchArticleDetails: Record<string, { author: string; readTime: string; publishedAt: string; body: string[] }> = {
+  'pedagogias-culturales-para-publicos-diversos': {
+    author: 'Equipo de Educacion Cultural',
+    readTime: '8 min',
+    publishedAt: 'Mayo 2026',
+    body: [
+      'El programa de mediacion cultural del Ateneo propone una pedagogia situada: cada sala, archivo y actividad se disena segun el perfil de sus publicos y objetivos de aprendizaje.',
+      'La metodologia combina observacion guiada, lectura de fuentes primarias y ejercicios de produccion breve para transformar la visita en una experiencia de comprension activa.',
+      'Durante 2026 se priorizan formatos intergeneracionales y recursos de accesibilidad cognitiva, con materiales de apoyo para docentes y facilitadores.',
+    ],
+  },
+  'atlas-instituciones-culturales-montevideo': {
+    author: 'Observatorio Ateneo',
+    readTime: '10 min',
+    publishedAt: 'Abril 2026',
+    body: [
+      'Este atlas releva instituciones, archivos y programas activos para entender como circula la produccion cultural en Montevideo y su area metropolitana.',
+      'El documento identifica nodos de colaboracion entre espacios independientes, universidades, bibliotecas y organismos publicos, con foco en continuidad y alcance territorial.',
+      'La publicacion se actualiza por trimestres para sostener una cartografia viva util para investigadores, curadores y gestores.',
+    ],
+  },
+  'laboratorio-lectura-critica-ciudadania': {
+    author: 'Programa Comunidad Lectora',
+    readTime: '7 min',
+    publishedAt: 'Marzo 2026',
+    body: [
+      'El laboratorio integra literatura, historia y debate publico para fortalecer competencias de lectura critica en diferentes franjas etarias.',
+      'Cada modulo incluye guias didacticas, preguntas de discusion y propuestas para aula o trabajo comunitario, con descarga libre.',
+      'La estrategia se articula con actividades presenciales y encuentros abiertos para ampliar la participacion ciudadana.',
+    ],
+  },
+};
+
+function slugifyArticle(value: string) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
 const aboutItems = [
   { label: 'Estatutos', to: '/estatutos' },
@@ -375,13 +474,21 @@ const routeSeo: Record<string, { title: string; description: string }> = {
     title: 'Visita el Ateneo de Montevideo | Plaza Cagancha 1157',
     description: 'Información para visitar el Ateneo de Montevideo, consultar horarios, cursos, salas y actividades culturales.',
   },
+  '/exposiciones': {
+    title: 'Exposiciones y Eventos | Ateneo de Montevideo',
+    description: 'Agenda editorial de exposiciones, instalaciones, ciclos públicos y actividades especiales del Ateneo.',
+  },
+  '/investigacion-educacion': {
+    title: 'Investigación y Educación | Ateneo de Montevideo',
+    description: 'Artículos, líneas de investigación y programas educativos para públicos, docentes y comunidades culturales.',
+  },
 };
 
 function ScrollToTop() {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }, [location.pathname]);
 
   return null;
@@ -486,10 +593,18 @@ function SeoManager() {
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     setIsOpen(false);
-  }, []);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   return (
     <>
@@ -519,24 +634,26 @@ function Header() {
         <Menu size={20} />
       </button>
       {isOpen && (
-        <div className="mobile-panel" role="dialog" aria-modal="true" aria-label="Menú">
-          <button className="icon-button close-button" type="button" onClick={() => setIsOpen(false)} aria-label="Cerrar menú">
-            <X size={20} />
-          </button>
-          <Link to="/" onClick={() => setIsOpen(false)} className="mobile-brand">Ateneo de Montevideo</Link>
-          {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} onClick={() => setIsOpen(false)}>
-              {item.label}
-              <ArrowRight size={18} />
-            </NavLink>
-          ))}
-          <div className="mobile-menu-group">Sobre el Ateneo</div>
-          {aboutItems.map((item) => (
-            <NavLink key={item.to} to={item.to} onClick={() => setIsOpen(false)}>
-              {item.label}
-              <ArrowRight size={18} />
-            </NavLink>
-          ))}
+        <div className="mobile-overlay" onClick={() => setIsOpen(false)}>
+          <div className="mobile-panel" role="dialog" aria-modal="true" aria-label="Menú" onClick={(event) => event.stopPropagation()}>
+            <button className="icon-button close-button" type="button" onClick={() => setIsOpen(false)} aria-label="Cerrar menú">
+              <X size={20} />
+            </button>
+            <Link to="/" onClick={() => setIsOpen(false)} className="mobile-brand">Ateneo de Montevideo</Link>
+            {navItems.map((item) => (
+              <NavLink key={item.to} to={item.to} onClick={() => setIsOpen(false)}>
+                {item.label}
+                <ArrowRight size={18} />
+              </NavLink>
+            ))}
+            <div className="mobile-menu-group">Sobre el Ateneo</div>
+            {aboutItems.map((item) => (
+              <NavLink key={item.to} to={item.to} onClick={() => setIsOpen(false)}>
+                {item.label}
+                <ArrowRight size={18} />
+              </NavLink>
+            ))}
+          </div>
         </div>
       )}
     </header>
@@ -561,6 +678,17 @@ function SectionTitle({ eyebrow, title, action }: { eyebrow?: string; title: str
         <h2>{title}</h2>
       </div>
       {action}
+    </div>
+  );
+}
+
+function BackToHomeLink({ to = '/' }: { to?: string }) {
+  return (
+    <div className="subtle-back-wrap">
+      <Link to={to} className="subtle-back-link">
+        <ArrowLeft size={14} />
+        Volver al inicio
+      </Link>
     </div>
   );
 }
@@ -590,6 +718,7 @@ function HomePage() {
       <Hero />
       <NoticeBar />
       <main id="contenido">
+        <HomeEditorialGateway />
         <section className="content-band">
           <SectionTitle eyebrow="Cursos y talleres" title="Programación abierta" action={<MuseumButton to="/cursos">Ver todos los cursos</MuseumButton>} />
           <div className="editorial-grid">
@@ -630,6 +759,31 @@ function HomePage() {
   );
 }
 
+function HomeEditorialGateway() {
+  return (
+    <section className="editorial-gateway">
+      <article className="editorial-card">
+        <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1600&q=80" alt="Sala expositiva con obras contemporáneas" loading="lazy" />
+        <div>
+          <p>Nuevo</p>
+          <h3>Exposiciones y Eventos</h3>
+          <span>Programación curatorial, agenda pública y recorridos especiales.</span>
+          <MuseumButton to="/exposiciones">Ver agenda</MuseumButton>
+        </div>
+      </article>
+      <article className="editorial-card">
+        <img src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=1600&q=80" alt="Lectura e investigación en biblioteca" loading="lazy" />
+        <div>
+          <p>Editorial</p>
+          <h3>Investigación y Educación</h3>
+          <span>Artículos, recursos y líneas de trabajo para comunidad cultural.</span>
+          <MuseumButton to="/investigacion-educacion">Explorar artículos</MuseumButton>
+        </div>
+      </article>
+    </section>
+  );
+}
+
 function HistoryHomeFeature() {
   return (
     <section className="history-home">
@@ -638,7 +792,7 @@ function HistoryHomeFeature() {
         <p>Fundado el 5 de setiembre de 1868, el Ateneo de Montevideo acompaña desde hace más de 150 años la cultura, la educación y la libre discusión de ideas en Uruguay.</p>
       </div>
       <div className="history-gallery compact-gallery">
-        {historyImages.slice(0, 4).map((image, index) => (
+        {historyImages.slice(0, 2).map((image, index) => (
           <img key={image} src={image} alt={`Archivo histórico del Ateneo de Montevideo ${index + 1}`} loading="lazy" />
         ))}
       </div>
@@ -702,6 +856,7 @@ function CoursesPage() {
   return (
     <main id="contenido" className="page-shell">
       <PageHero eyebrow="Cursos" title="Programación académica 2026" text="La oferta deja de vivir escondida en una landing: cada curso tiene una página propia, con objetivos, requisitos y datos de inscripción." />
+      <BackToHomeLink />
       <section className="filters">
         <label className="search-box">
           <Search size={18} />
@@ -809,6 +964,7 @@ function RoomsPage() {
   return (
     <main id="contenido" className="page-shell">
       <PageHero eyebrow="Salas" title="Una colección de espacios" text="Cada sala se trabaja como una pieza de navegación propia, con contexto histórico y una lectura clara del legado que representa." />
+      <BackToHomeLink />
       <section className="room-grid">
         {rooms.map((room) => <RoomCard key={room.id} room={room} />)}
       </section>
@@ -856,6 +1012,7 @@ function HistoryPage() {
   return (
     <main id="contenido" className="page-shell">
       <PageHero eyebrow="Historia" title="Un instituto cultural con vocación pública" text="El Ateneo de Montevideo nace como espacio de formación, intercambio intelectual y difusión cultural." />
+      <BackToHomeLink />
       <section className="history-gallery">
         {historyImages.map((image, index) => (
           <img key={image} src={image} alt={`Archivo histórico del Ateneo de Montevideo ${index + 1}`} loading="lazy" />
@@ -1039,6 +1196,7 @@ function VisitPage() {
   return (
     <main id="contenido" className="page-shell">
       <PageHero eyebrow="Visita" title="Ven a visitarnos" text="Información práctica para llegar al Ateneo, consultar horarios y planificar una visita o actividad." />
+      <BackToHomeLink />
       <VisitPreview />
     </main>
   );
@@ -1048,6 +1206,7 @@ function ContactPage() {
   return (
     <main id="contenido" className="page-shell">
       <PageHero eyebrow="Contacto" title="Hablemos de cursos, salas y actividades" text="Podés escribirnos o acercarte a Plaza Cagancha para consultar inscripciones, agenda y disponibilidad de espacios." />
+      <BackToHomeLink />
       <section className="contact-grid">
         <div className="contact-card">
           <MapPin size={20} />
@@ -1064,6 +1223,118 @@ function ContactPage() {
           <h2>Email</h2>
           <p>ateneo@ateneodemontevideo.uy<br />ateneodemontevideo58@gmail.com</p>
         </div>
+      </section>
+    </main>
+  );
+}
+
+function ExposicionesPage() {
+  return (
+    <main id="contenido" className="page-shell">
+      <PageHero eyebrow="Exposiciones y Eventos" title="Una agenda viva de arte y pensamiento" text="Curaduría, instalaciones, ciclos públicos y experiencias en sala con lectura contemporánea." />
+      <BackToHomeLink />
+      <section className="exhibitions-layout">
+        <div className="exhibitions-grid">
+          {exhibitions.map((item) => (
+            <article key={item.id} className="exhibition-card">
+              <img src={item.image} alt="" loading="lazy" />
+              <div>
+                <p>{item.format}</p>
+                <h2>{item.title}</h2>
+                <strong>{item.period}</strong>
+                <span>{item.summary}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+        <aside className="event-agenda">
+          <h2>Próximos eventos</h2>
+          {events.map((event) => (
+            <article key={event.title}>
+              <p>{event.date}</p>
+              <h3>{event.title}</h3>
+              <span>{event.detail}</span>
+            </article>
+          ))}
+          <MuseumButton to="/contacto">Reservar lugar</MuseumButton>
+        </aside>
+      </section>
+    </main>
+  );
+}
+
+function ResearchEducationPage() {
+  return (
+    <main id="contenido" className="page-shell">
+      <PageHero eyebrow="Investigación y Educación" title="Publicaciones, procesos y comunidad" text="Una plataforma editorial para compartir conocimiento, metodologías y experiencias de aprendizaje." />
+      <BackToHomeLink />
+      <section className="research-layout">
+        {researchArticles.map((article) => (
+          <article key={article.title} className="research-card">
+            <Link to={`/investigacion-educacion/${slugifyArticle(article.title)}`} aria-label={`Abrir artículo ${article.title}`}>
+              <img src={article.image} alt="" loading="lazy" />
+              <div>
+                <p>{article.category}</p>
+                <h2>{article.title}</h2>
+                <span>{article.excerpt}</span>
+              </div>
+            </Link>
+          </article>
+        ))}
+      </section>
+    </main>
+  );
+}
+
+function ResearchArticlePage() {
+  const { articleSlug } = useParams();
+  const article = researchArticles.find((item) => slugifyArticle(item.title) === articleSlug);
+
+  if (!article) {
+    return <NotFoundPage />;
+  }
+
+  const details = researchArticleDetails[slugifyArticle(article.title)] ?? {
+    author: 'Equipo Ateneo',
+    readTime: '5 min',
+    publishedAt: '2026',
+    body: [article.excerpt],
+  };
+  const related = researchArticles.filter((item) => item.title !== article.title);
+
+  return (
+    <main id="contenido" className="page-shell">
+      <BackToHomeLink to="/investigacion-educacion" />
+      <section className="article-hero">
+        <img src={article.image} alt="" loading="lazy" />
+        <div>
+          <p>{article.category}</p>
+          <h1>{article.title}</h1>
+          <span>{article.excerpt}</span>
+          <small>{details.author} · {details.publishedAt} · {details.readTime}</small>
+        </div>
+      </section>
+      <section className="article-layout">
+        <article className="article-content">
+          {details.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+          <h2>Recursos del programa</h2>
+          <ul>
+            <li>Guia de mediacion para equipos docentes y culturales.</li>
+            <li>Ficha de actividades para implementacion en aula o taller.</li>
+            <li>Bibliografia de referencia y lecturas recomendadas.</li>
+          </ul>
+        </article>
+        <aside className="article-aside">
+          <h2>Continuar leyendo</h2>
+          {related.map((item) => (
+            <Link key={item.title} to={`/investigacion-educacion/${slugifyArticle(item.title)}`}>
+              <p>{item.category}</p>
+              <h3>{item.title}</h3>
+            </Link>
+          ))}
+        </aside>
       </section>
     </main>
   );
@@ -1117,26 +1388,35 @@ function Footer() {
   );
 }
 
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/cursos" element={<CoursesPage />} />
+      <Route path="/cursos/:courseId" element={<CourseDetailPage />} />
+      <Route path="/salas" element={<RoomsPage />} />
+      <Route path="/salas/:roomId" element={<RoomDetailPage />} />
+      <Route path="/historia" element={<HistoryPage />} />
+      <Route path="/estatutos" element={<StatutesPage />} />
+      <Route path="/directivos" element={<DirectivosPage />} />
+      <Route path="/presidentes" element={<PresidentesPage />} />
+      <Route path="/visita" element={<VisitPage />} />
+      <Route path="/exposiciones" element={<ExposicionesPage />} />
+      <Route path="/investigacion-educacion" element={<ResearchEducationPage />} />
+      <Route path="/investigacion-educacion/:articleSlug" element={<ResearchArticlePage />} />
+      <Route path="/contacto" element={<ContactPage />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  );
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <SeoManager />
       <Header />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/cursos" element={<CoursesPage />} />
-        <Route path="/cursos/:courseId" element={<CourseDetailPage />} />
-        <Route path="/salas" element={<RoomsPage />} />
-        <Route path="/salas/:roomId" element={<RoomDetailPage />} />
-        <Route path="/historia" element={<HistoryPage />} />
-        <Route path="/estatutos" element={<StatutesPage />} />
-        <Route path="/directivos" element={<DirectivosPage />} />
-        <Route path="/presidentes" element={<PresidentesPage />} />
-        <Route path="/visita" element={<VisitPage />} />
-        <Route path="/contacto" element={<ContactPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <AppRoutes />
       <Footer />
     </BrowserRouter>
   );
